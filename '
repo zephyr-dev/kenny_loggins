@@ -1,0 +1,7 @@
+module KennyLoggins
+  class Event < ApplicationModel
+    serialize :data, ActiveRecord::Coders::Hstore
+    belongs_to :application
+    validate :application, presence: true
+  end
+end
