@@ -14,6 +14,4 @@ group :development, :test do
   gem 'pry-doc'
 end
 
-gem 'pg'
-gem 'activerecord'
-
+gem 'cassandra-driver'

@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Gust"]
   spec.email         = ["zephyr-dev@googlegroups.com"]
   spec.summary       = %q{Logging service}
-  spec.description   = %q{A logger what logs logs}
+  spec.description   = %q{It's a full blown footloose dangerzone}
   spec.homepage      = ""
   spec.license       = "MIT"
 
