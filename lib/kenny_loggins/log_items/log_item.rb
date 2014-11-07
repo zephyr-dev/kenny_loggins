@@ -1,3 +1,3 @@
 module KennyLoggins
-  class LogItem < ::Cassandra::Record; end
+  class LogItem < ::CassandraRecord::Base; end
 end

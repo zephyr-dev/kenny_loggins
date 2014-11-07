@@ -1,34 +1,32 @@
 require 'active_support/inflector'
-require 'dbi'
 
-module Cassandra
-  class Record
+module CassandraRecord
+  class Base
     class << self
       def create(attributes)
         new(attributes).create
+      end
+
+      def where(attributes={})
+        new.where(attributes)
       end
     end
 
     attr_accessor :attributes
 
-    def initialize(attributes)
+    def initialize(attributes={})
       @attributes = attributes
     end
 
-    def create
-      cql = <<-CQL
-INSERT INTO #{table_name} (#{columns.join(", ")})
-VALUES (#{value_placeholders.join(", ")})
-      CQL
+    def where(options={})
+      Statement.where(table_name, options)
+    end
 
-      db.execute(cql, *values)
+    def create
+      Statement.create(table_name, columns, values)
     end
 
     private
-
-    def db
-      Database::Adapters::Cassandra
-    end
 
     def table_name
       ActiveSupport::Inflector.tableize(
@@ -41,14 +39,6 @@ VALUES (#{value_placeholders.join(", ")})
 
     def values
       attributes.values.map { |value| Cassandra::Util.encode_object(value) }
-    end
-
-    def value_placeholders
-      [].tap do |arr|
-        values.count.times do
-          arr << "?"
-        end
-      end
     end
 
   end
