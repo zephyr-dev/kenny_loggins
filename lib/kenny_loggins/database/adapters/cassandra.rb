@@ -10,7 +10,6 @@ module Database
         end
 
         def execute(cql, *args)
-          binding.pry
           session.execute(cql, *args)
         end
 
