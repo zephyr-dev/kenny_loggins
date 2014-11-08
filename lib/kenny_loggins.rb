@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'pry'
-require 'cassandra_record/record'
+
+require 'cassandra_record/base'
 require 'cassandra_record/statement'
-require 'kenny_loggins/database/adapters/cassandra'
+require 'cassandra_record/database/adapters/cassandra'
+
 require 'kenny_loggins/log_items/log_item'
 require 'kenny_loggins/logger'
 require 'kenny_loggins/version'

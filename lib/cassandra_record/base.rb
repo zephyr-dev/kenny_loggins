@@ -1,3 +1,4 @@
+require 'active_support/hash_with_indifferent_access'
 require 'active_support/inflector'
 
 module CassandraRecord
@@ -15,15 +16,18 @@ module CassandraRecord
     attr_accessor :attributes
 
     def initialize(attributes={})
-      @attributes = attributes
+      @attributes = HashWithIndifferentAccess.new(attributes)
     end
 
     def where(options={})
-      Statement.where(table_name, options)
+      Statement.where(table_name, options).map do |attributes|
+        self.class.new(attributes)
+      end
     end
 
     def create
       Statement.create(table_name, columns, values)
+      self
     end
 
     private
@@ -38,7 +42,15 @@ module CassandraRecord
     end
 
     def values
-      attributes.values.map { |value| Cassandra::Util.encode_object(value) }
+      attributes.values
+    end
+
+    def method_missing(method, *args, &block)
+      if attributes.has_key?(method)
+        attributes[method]
+      else
+        super(method, *args, &block)
+      end
     end
 
   end

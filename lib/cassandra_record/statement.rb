@@ -23,19 +23,20 @@ module CassandraRecord
       def create(table_name, columns, values)
         cql = <<-CQL
 INSERT INTO #{table_name} (#{columns.join(", ")})
-VALUES (#{value_placeholders.join(", ")})
+VALUES (#{value_placeholders(values).join(", ")})
         CQL
 
-        db.execute(cql, *values)
+        insert_statement = db.prepare(cql)
+        db.execute(insert_statement, *values)
       end
 
       private
 
       def db
-        Database::Adapters::Cassandra
+        Database::Adapters::Cassandra.instance
       end
 
-      def value_placeholders
+      def value_placeholders(values)
         [].tap do |arr|
           values.count.times do
             arr << "?"
