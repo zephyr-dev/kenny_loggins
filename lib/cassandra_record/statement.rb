@@ -4,15 +4,9 @@ module CassandraRecord
       def where(table_name, options={})
         cql = base_where_query(table_name)
 
-        unless options.empty?
+        if options.present?
           cql << 'WHERE'
-
-          clause_count = 0
-          options.each do |column, value|
-            cql << ' AND' if clause_count > 0
-            cql << " #{column.to_s} = #{Cassandra::Util.encode_object(value)}"
-            clause_count += 1
-          end
+          cql << parse_where_clause_options(options)
         end
 
         cql << ';'
@@ -48,6 +42,19 @@ VALUES (#{value_placeholders(values).join(", ")})
 SELECT *
 FROM #{table_name}
         CQL
+      end
+
+      def parse_where_clause_options(options)
+        return options if options.is_a?(String)
+
+        clause_count = 0
+        "".tap do |cql|
+          options.each do |column, value|
+            cql << ' AND' if clause_count > 0
+            cql << " #{column.to_s} = #{Cassandra::Util.encode_object(value)}"
+            clause_count += 1
+          end
+        end
       end
     end
   end
