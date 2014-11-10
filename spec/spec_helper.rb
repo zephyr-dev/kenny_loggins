@@ -1,7 +1,5 @@
 require 'kenny_loggins'
 
-CassandraRecord::Database::Adapters::Cassandra.instance.use("cassandra_test")
-
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
@@ -14,50 +12,55 @@ RSpec.configure do |config|
 
   # create test keyspace and table
   db = CassandraRecord::Database::Adapters::Cassandra.instance
-  keyspace = 'cassandra_test'
 
   config.add_setting :db
-  config.add_setting :keyspace
   config.db = db
-  config.keyspace = keyspace
-
-  drop_keyspace = <<-CQL
-    DROP KEYSPACE IF EXISTS #{keyspace};
-  CQL
+  config.add_setting :keyspace
+  config.keyspace = CassandraRecord::Database::Adapters::Cassandra.instance.keyspace
 
   create_keyspace = <<-CQL
-    CREATE KEYSPACE #{keyspace}
+    CREATE KEYSPACE IF NOT EXISTS #{db.keyspace}
     WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
     CQL
 
-  drop_test_table = <<-CQL
-    DROP TABLE IF EXISTS testrecords;
-  CQL
-
-  create_test_table = <<-CQL
-    CREATE TABLE testrecords (
+  create_test_table_1 = <<-CQL
+    CREATE TABLE IF NOT EXISTS test_records (
       id int,
       name text,
       PRIMARY KEY (id)
     );
   CQL
 
+  create_test_table_2 = <<-CQL
+    CREATE TABLE IF NOT EXISTS matching_log_items (
+      blah int,
+      whatever text,
+      PRIMARY KEY (blah)
+    );
+  CQL
+
+  create_test_table_3 = <<-CQL
+    CREATE TABLE IF NOT EXISTS non_matching_log_items (
+      blah int,
+      whatever text,
+      PRIMARY KEY (blah)
+    );
+  CQL
+
   create_table_index = <<-CQL
-    CREATE INDEX name_index ON testrecords (name);
+    CREATE INDEX IF NOT EXISTS test_records_name_index ON test_records (name);
   CQL
 
-  truncate_table = <<-CQL
-    TRUNCATE testrecords;
-  CQL
-
-  db.cluster.execute(drop_keyspace)
   db.cluster.execute(create_keyspace)
-  db.use(keyspace)
-  db.execute(drop_test_table)
-  db.execute(create_test_table)
+  db.use(db.keyspace)
+  db.execute(create_test_table_1)
+  db.execute(create_test_table_2)
+  db.execute(create_test_table_3)
   db.execute(create_table_index)
 
-  config.after(:all) do
-    db.execute(truncate_table)
+  config.before(:each) do
+    ['test_records', 'matching_log_items', 'kenny_loggins_activity_log_items'].each do |table_name|
+      db.execute("TRUNCATE #{table_name}")
+    end
   end
 end

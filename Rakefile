@@ -1,11 +1,15 @@
 require "bundler/gem_tasks"
 require 'kenny_loggins'
 
-MIGRATIONS_DIR='db/migrate'
-
 task :environment do
 end
 
-desc "Migrates this bad boy"
-task :migrate => :environment do
+namespace :kenny_loggins do 
+  namespace :structure do
+    desc "Loads your structures"
+    task :load => :environment do
+      filepath = File.dirname(__FILE__) + "/db/cassandra_structure.cql"
+      `cqlsh -f #{filepath}`
+    end
+  end
 end

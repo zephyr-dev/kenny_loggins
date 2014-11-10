@@ -1,4 +1,5 @@
 require 'active_support/hash_with_indifferent_access'
+require 'active_support/core_ext/hash'
 require 'active_support/inflector'
 
 module CassandraRecord
@@ -20,7 +21,7 @@ module CassandraRecord
     end
 
     def where(options={})
-      Statement.where(table_name, options).map do |attributes|
+      results = Statement.where(table_name, options).map do |attributes|
         self.class.new(attributes)
       end
     end
@@ -33,8 +34,7 @@ module CassandraRecord
     private
 
     def table_name
-      ActiveSupport::Inflector.tableize(
-        ActiveSupport::Inflector.parameterize(self.class.name))
+      ActiveSupport::Inflector.tableize(self.class.name).gsub(/\//, '_')
     end
 
     def columns

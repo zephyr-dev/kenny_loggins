@@ -18,7 +18,7 @@ describe CassandraRecord::Base do
       record = TestRecord.create(id: 99, name: 'turkey')
 
       select = <<-CQL
-        SELECT * from #{keyspace}.testrecords
+        SELECT * from #{keyspace}.test_records
         WHERE id = 99;
       CQL
 
@@ -35,15 +35,15 @@ describe CassandraRecord::Base do
     context "with results" do
       before do
         insert_1 = <<-CQL
-          INSERT INTO #{keyspace}.testrecords (id, name)
+          INSERT INTO #{keyspace}.test_records (id, name)
           VALUES (9090, 'burgers');
         CQL
         insert_2 = <<-CQL
-          INSERT INTO #{keyspace}.testrecords (id, name)
+          INSERT INTO #{keyspace}.test_records (id, name)
           VALUES (8080, 'nachos');
         CQL
         insert_3 = <<-CQL
-          INSERT INTO #{keyspace}.testrecords (id, name)
+          INSERT INTO #{keyspace}.test_records (id, name)
           VALUES (7070, 'nachos');
         CQL
 

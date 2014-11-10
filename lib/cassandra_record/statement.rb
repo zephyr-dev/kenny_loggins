@@ -9,14 +9,13 @@ module CassandraRecord
 
           clause_count = 0
           options.each do |column, value|
-            cql << 'AND ' if clause_count > 0
-            cql << " #{column.to_s} = #{Cassandra::Util.encode_object(value)} "
+            cql << ' AND' if clause_count > 0
+            cql << " #{column.to_s} = #{Cassandra::Util.encode_object(value)}"
             clause_count += 1
           end
         end
 
         cql << ';'
-
         db.execute(cql)
       end
 
