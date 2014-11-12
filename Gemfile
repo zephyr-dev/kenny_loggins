@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in kenny_loggins.gemspec
 gemspec
 
 group 'test' do
@@ -15,5 +14,4 @@ group :development, :test do
 end
 
 
-gem 'cassandra-driver'
-gem 'activesupport'
+gem 'cassandra_record'

@@ -21,7 +21,7 @@ RSpec.configure do |config|
   create_keyspace = <<-CQL
     CREATE KEYSPACE IF NOT EXISTS #{db.keyspace}
     WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
-    CQL
+  CQL
 
   create_test_table_1 = <<-CQL
     CREATE TABLE IF NOT EXISTS test_records (
