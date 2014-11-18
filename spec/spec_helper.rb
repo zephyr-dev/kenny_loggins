@@ -12,11 +12,14 @@ RSpec.configure do |config|
 
   # create test keyspace and table
   db = CassandraRecord::Database::Adapters::Cassandra.instance
+  db.use('gust_test') # TODO make this exteranally configurable and not so 'gusty'
 
   config.add_setting :db
   config.db = db
   config.add_setting :keyspace
   config.keyspace = CassandraRecord::Database::Adapters::Cassandra.instance.keyspace
+
+  `rake kenny_loggins:structure:load` # TODO: make this all better
 
   create_keyspace = <<-CQL
     CREATE KEYSPACE IF NOT EXISTS #{db.keyspace}

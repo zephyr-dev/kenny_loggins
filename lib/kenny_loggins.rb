@@ -8,5 +8,9 @@ require 'kenny_loggins/logger'
 require 'kenny_loggins/version'
 
 module KennyLoggins
-  CassandraRecord::Database::Adapters::Cassandra.instance.use("kenny_loggins")
+  require 'kenny_loggins/railtie' if defined?(Rails)
+
+  def self.root_dir
+    File.expand_path '..', __dir__
+  end
 end

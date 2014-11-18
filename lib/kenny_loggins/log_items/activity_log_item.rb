@@ -5,5 +5,9 @@ module KennyLoggins
         attributes
       end
     end
+
+    def to_hash
+      @attributes
+    end
   end
 end
