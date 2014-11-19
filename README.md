@@ -43,11 +43,11 @@ class SomeNewLogItem < CassandraRecord::Base
     # Transforms generic activity data into
     # a shape more appropriate for this Item
     def transform(raw_attrs)
-      return {} unless attrs.has_key?(:data)
+      return {} unless raw_attrs.has_key?(:data)
 
       HashWithIndifferentAccess.new({
-        blah: data['some_interesting_data_key'],
-        whatever: data['another_interesting_data_key']
+        blah: raw_attrs['data']['some_interesting_data'],
+        whatever: raw_attrs['data']['another_interesting_data']
       })
     end
   end
