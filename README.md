@@ -19,6 +19,11 @@ Or install it yourself as:
 
     $ gem install kenny_loggins
 
+If using with Rails, generate required migrations by running:
+```bash
+rails g kenny_loggins:install
+```
+
 ## Usage
 
 1. Define a new Activity Processor
