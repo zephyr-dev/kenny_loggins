@@ -13,5 +13,5 @@ group :development, :test do
   gem 'pry-doc'
 end
 
+gem 'cassandra_record', :git => 'https://github.com/zephyr-dev/cassandra_record.git'
 
-gem 'cassandra_record'
