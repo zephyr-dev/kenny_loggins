@@ -25,7 +25,7 @@ module KennyLoggins
       end
 
       def default_log_item_types
-        [ActivityLogItem]
+        [KennyLoggins.default_log_item_type]
       end
     end
   end
