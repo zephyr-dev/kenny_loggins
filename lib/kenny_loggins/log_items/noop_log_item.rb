@@ -5,6 +5,10 @@ module KennyLoggins
         # noop
       end
 
+      def batch_create(items)
+        # noop
+      end
+
       def where(attributes)
         []
       end
