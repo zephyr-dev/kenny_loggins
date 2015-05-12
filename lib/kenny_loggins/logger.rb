@@ -9,6 +9,18 @@ module KennyLoggins
         end
       end
 
+      def batch_log(items)
+        items.group_by { |item| item[:activity_name] }.each do |activity_name, items|
+          log_item_types_for(activity_name).each do |log_item_type|
+            transformed_items = []
+            items.each do |item|
+              transformed_items.push(log_item_type.transform(item))
+            end
+            log_item_type.batch_create(transformed_items)
+          end
+        end
+      end
+
       def register_log_item_type(log_item_type)
         registered_log_item_types << log_item_type
       end
